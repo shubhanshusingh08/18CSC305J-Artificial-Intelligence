@@ -1,0 +1,714 @@
+Exp 1: IMPLEMENTATION OF TOY PROGRAMMING USING
+PYTHON
+
+total=int(input("Enter no. of bananas at starting"))
+distance=int(input("Enter distance you want to cover"))
+load_capacity=int(input("Enter maximum load capacity of camel"))
+lose=0
+start=total
+for i in range(distance):
+    while start>0:
+        start=start-load_capacity
+        if start==1:
+            lose=lose-1
+        lose=lose+2
+    lose=lose-1
+    start=total-lose
+    if start==0:
+        break
+print(start)
+
+-------------------------------------------------
+
+Exp 2: Developing agent programs for real world problem - Graph coloring problem (Backtracking - follows DFS))
+
+class Graph:
+    def __init__(self, edges, N):
+        self.adj = [[] for _ in range(N)]
+        
+        for(src, dest) in edges:
+            self.adj[src].append(dest)
+            self.adj[dest].append(src)
+            
+def colorGraph(graph):
+    result = {}
+    for u in range(N):
+        assigned = set([result.get(i) for i in result])
+        color = 1
+        for c in assigned:
+            if color != c:
+              break
+            color = color + 1
+        result[u] = color
+    for v in range(N):
+        print("Color assigned to vertex", v, "is", colors[result[v]])
+colors = ["", "BLUE", "GREEN", "RED", "YELLOW", "ORANGE", "PINK", "BLACK", "BROWN", "WHITE", "PURPLE", "VOILET"]
+edges = [(0,1), (0,4), (0,5), (4,5), (1,4), (1,3), (2,3), (2,4)]
+N = 6
+graph = Graph(edges, N)
+colorGraph(graph)
+
+--------------------------------------------------------------
+
+Exp 3: Constraint Satisfaction Problem-Crypt arithmetic puzzle
+
+import string
+import itertools
+inListNumsAsStringArray = [ ['BASE', 'BALL'],  ['SEND', 'MORE'] ]
+inResultsArray = [ 'GAMES', 'MONEY' ]
+inPossibleNumsAsStr = '0123456789'
+def getNumberFromStringAndMappingInfo(inStr, inDictMapping):
+    numAsStr = ''
+    for ch in inStr:
+        numAsStr = numAsStr + inDictMapping[ch] 
+    return int(numAsStr)
+def solveCryptarithmeticBruteForce(inListNumsAsString, inResultStr, inPossibleNumsAsStr):
+    nonZeroLetters = []
+    strFromStrList = ''
+    for numStr in inListNumsAsString:
+        nonZeroLetters.append(numStr[0])
+        strFromStrList = strFromStrList + numStr
+    nonZeroLetters.append(inResultStr[0])
+    strFromStrList = strFromStrList + inResultStr 
+    uniqueStrs = ''.join(set(strFromStrList))
+    for tup in itertools.permutations(inPossibleNumsAsStr, len(uniqueStrs)):
+        dictCharAndDigit = {}
+        for i in range(len(uniqueStrs)):
+            dictCharAndDigit[uniqueStrs[i]] = tup[i] 
+        nonZeroLetterIsZero = False
+        for letter in nonZeroLetters:
+            if(dictCharAndDigit[letter] == '0'):
+                nonZeroLetterIsZero = True
+                break
+        if(nonZeroLetterIsZero == True):
+            continue
+        result = getNumberFromStringAndMappingInfo(inResultStr, dictCharAndDigit) 
+        testResult = 0
+        for numStr in inListNumsAsString:
+            testResult = testResult + getNumberFromStringAndMappingInfo(numStr, dictCharAndDigit) 
+        if(testResult == result):
+            strToPrint = ''
+            for numStr in inListNumsAsString:
+                strToPrint = strToPrint + numStr + '(' + str(getNumberFromStringAndMappingInfo(numStr, dictCharAndDigit)) + ')' + ' + '
+            strToPrint = strToPrint[:-3]
+            strToPrint = strToPrint + ' = ' + inResultStr + '(' + str(result) + ')'
+            print(strToPrint)
+            break
+for i in range(len(inResultsArray)):
+    solveCryptarithmeticBruteForce(inListNumsAsStringArray[i], inResultsArray[i], 
+inPossibleNumsAsStr)
+
+-----------------------------------------
+
+Exp 4: Implementation and analysis of BFS and DFS 
+
+BFS:
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+class Solution(object):
+    def rangeSumBST(self, root, L, R):
+        if root == None:
+            return 0
+        res = 0
+        q = [root]
+        while q:
+            next = []
+            for node in q:
+                if L <= node.val <= R:
+                    res += node.val
+                if node.left:
+                    next.append(node.left)
+                if node.right:
+                    next.append(node.right)
+            q = next
+        return res
+bst = TreeNode(10)
+bst.left = TreeNode(5)
+bst.right = TreeNode(15)
+bst.left.left = TreeNode(3)
+bst.left.right = TreeNode(7)
+bst.right.right = TreeNode(18)
+min = int(input("Enter the Lower value of the range : "))
+max = int(input("Enter the Higher value of the range : "))
+sol = Solution().rangeSumBST(bst, min, max)
+print(f"The sum of the nodes in the range {min} and {max} is {sol}")
+
+
+DFS:
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+def rangeSumBST(root, L, R):
+    ans = 0
+    stack = [root]
+    while stack:
+        node = stack.pop()
+        if node:
+            if L <= node.val <= R:
+                ans += node.val
+            if L < node.val:
+                stack.append(node.left)
+            if node.val < R:
+                stack.append(node.right)
+    return ans
+bst = TreeNode(10)
+bst.left = TreeNode(5)
+bst.right = TreeNode(15)
+bst.left.left = TreeNode(3)
+bst.left.right = TreeNode(7)
+bst.right.right = TreeNode(18)
+min = int(input("Enter the Lower value of the range : "))
+max = int(input("Enter the Higher value of the range : "))
+sol = rangeSumBST(bst, min, max)
+print(f"The sum of the nodes in the range {min} and {max} is {sol}")
+
+
+---------------------------------------------
+
+Exp 5: Developing Best first search and A* algorithm for real world problem
+
+
+---------------------------------------------
+
+Exp 6: Developing Min Max algorithm
+
+BFS:
+
+from queue import PriorityQueue
+import matplotlib.pyplot as plt
+
+import networkx as nx
+
+def best_first_search(source, target, n):
+    visited = [0] * n
+    visited[source] = True
+    pq = PriorityQueue()
+    pq.put((0, source))
+    while pq.empty() == False:
+        u = pq.get()[1]
+        print(u, end=" ") 
+        if u == target:
+           break
+        for v, c in graph[u]:
+            if visited[v] == False:
+                visited[v] = True
+                pq.put((c, v))
+    print()
+    
+def addedge(x, y, cost):
+ graph[x].append((y, cost))
+ graph[y].append((x, cost))
+G = nx.Graph()
+v = int(input("Enter the number of nodes: "))
+graph = [[] for i in range(v)] # undirected Graph
+e = int(input("Enter the number of edges: "))
+print("Enter the edges along with their weights:")
+for i in range(e):
+ x, y, z = list(map(int, input().split()))
+ addedge(x, y, z)
+ G.add_edge(x, y, weight = z)
+source = int(input("Enter the Source Node: "))
+target = int(input("Enter the Target/Destination Node: "))
+print("\nPath: ", end = "")
+best_first_search(source, target, v)
+
+A* Search:
+
+from collections import deque
+class Graph:
+ def __init__(self, adjacency_list):
+     self.adjacency_list = adjacency_list
+ def get_neighbors(self, v):
+     return self.adjacency_list[v]
+ def h(self, n):
+     H = {'A': 1,'B': 1,'C': 1,'D': 1}
+     return H[n]
+ def a_star_algorithm(self, start_node, stop_node):
+     open_list = set([start_node])
+     closed_list = set([])
+     g = {}
+     g[start_node] = 0
+     parents = {}
+     parents[start_node] = start_node
+     while len(open_list) > 0:
+         n = None
+         for v in open_list:
+             if n == None or g[v] + self.h(v) < g[n] + self.h(n):
+                 n = v;
+         if n == None:
+             print('Path does not exist!')
+             return None
+         if n == stop_node:
+             reconst_path = []
+             while parents[n] != n:
+                 reconst_path.append(n)
+                 n = parents[n]
+             reconst_path.append(start_node)
+             reconst_path.reverse()
+             print('Path found: {}'.format(reconst_path))
+             return reconst_path
+         for (m, weight) in self.get_neighbors(n):
+             if m not in open_list and m not in closed_list:
+                 open_list.add(m)
+                 parents[m] = n
+                 g[m] = g[n] + weight
+             else:
+                 if g[m] > g[n] + weight:
+                     g[m] = g[n] + weight
+                     parents[m] = n
+                     if m in closed_list:
+                         closed_list.remove(m)
+                         open_list.add(m)
+         open_list.remove(n)
+         closed_list.add(n)
+     print('Path does not exist!')
+     return None
+adjacency_list = {
+ 'A': [('B', 1), ('C', 3), ('D', 7)],
+ 'B': [('D', 5)],
+ 'C': [('D', 12)]
+}
+graph1 = Graph(adjacency_list)
+graph1.a_star_algorithm('A', 'D')
+
+-----------------------------------------------
+
+Exp 6: Min max algorithm: Tic Tac toe
+
+theBoard = {'1': ' ' , '2': ' ' , '3': ' ' ,'4': ' ' , '5': ' ' , '6': ' ' ,'7': ' ' , '8': ' ' , '9': ' '}
+board_keys = []
+for key in theBoard:
+ board_keys.append(key)
+def printBoard(board):
+    print(board['7'] + '|' + board['8'] + '|' + board['9'])
+    print('-+-+-')
+    print(board['4'] + '|' + board['5'] + '|' + board['6'])
+    print('-+-+-')
+    print(board['1'] + '|' + board['2'] + '|' + board['3'])
+
+def game():
+    turn = 'X'
+    count = 0
+    for i in range(10):
+        printBoard(theBoard)
+        print("It's your turn," + turn + ".Move to which place?")
+        move = input() 
+        if theBoard[move] == ' ':
+            theBoard[move] = turn
+            count += 1
+        else:
+            print("That place is already filled.\nMove to which place?")
+            continue
+    
+        if count >= 5:
+            if theBoard['7'] == theBoard['8'] == theBoard['9'] != ' ':
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****") 
+                break
+            elif theBoard['4'] == theBoard['5'] == theBoard['6'] != ' ': 
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['1'] == theBoard['2'] == theBoard['3'] != ' ': 
+                # across the bottom
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['1'] == theBoard['4'] == theBoard['7'] != ' ': 
+                # down the left side
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['2'] == theBoard['5'] == theBoard['8'] != ' ': 
+                # down the middle
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['3'] == theBoard['6'] == theBoard['9'] != ' ': 
+                # down the right side
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break 
+            elif theBoard['7'] == theBoard['5'] == theBoard['3'] != ' ': 
+                # diagonal
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['1'] == theBoard['5'] == theBoard['9'] != ' ': 
+                # diagonal
+                printBoard(theBoard)
+                print("\nGame Over.\n") 
+                print(" **** " +turn + " won. ****")
+                break 
+        # If neither X nor O wins and the board is full, we'll declare the result as 'tie'.
+        if count == 9:
+            print("\nGame Over.\n") 
+            print("It's a Tie!!")
+        
+        # Now we have to change the player after every move.
+        if turn =='X':
+            turn = 'O'
+        else:
+            turn = 'X' 
+ 
+    # Now we will ask if player wants to restart the game or not.
+    restart = input("Do want to play Again?(y/n)")
+    if restart == "y" or restart == "Y": 
+        for key in board_keys:
+            theBoard[key] = " "
+        
+        game()
+    
+if __name__ == "__main__":
+    game()
+
+--------------------------------------
+
+Exp 7a: Unification
+
+def get_index_comma(string):
+    index_list = list()
+    par_count = 0
+    
+    for i in range(len(string)):
+        if string[i] == ',' and par_count == 0:
+            index_list.append(i)
+        elif string[i] == '(':
+            par_count += 1
+        elif string[i] == ')':
+            par_count -= 1
+    return index_list
+    
+def is_variable(expr):
+    for i in expr:
+        if i == '(' or i == ')':
+            return False
+    return True
+    
+def process_expression(expr):
+    expr = expr.replace(' ', '')
+    index = None
+    for i in range(len(expr)):
+        if expr[i] == '(':
+            index = i
+            break
+    predicate_symbol = expr[:index]
+    expr = expr.replace(predicate_symbol, '')
+    expr = expr[1:len(expr) - 1]
+    arg_list = list()
+    indices = get_index_comma(expr)
+    if len(indices) == 0:
+        arg_list.append(expr)
+    else:
+        arg_list.append(expr[:indices[0]])
+        for i, j in zip(indices, indices[1:]):
+            arg_list.append(expr[i + 1:j])
+        arg_list.append(expr[indices[len(indices) - 1] + 1:])
+    return predicate_symbol, arg_list
+def get_arg_list(expr):
+ _, arg_list = process_expression(expr)
+ flag = True
+ while flag:
+   flag = False
+   for i in arg_list:
+       if not is_variable(i):
+           flag = True
+           tmp = process_expression(i)
+           for j in tmp:
+               if j not in arg_list:
+                   arg_list.append(j)
+           arg_list.remove(i)
+ return arg_list
+def check_occurs(var, expr):
+    arg_list = get_arg_list(expr)
+    if var in arg_list:
+            return True
+    return False
+def unify(expr1, expr2):
+ if is_variable(expr1) and is_variable(expr2):
+     if expr1 == expr2:
+        return 'Null'
+     else:
+        return False
+ elif is_variable(expr1) and not is_variable(expr2):
+        if check_occurs(expr1, expr2):
+            return False
+        else:
+            tmp = str(expr2) + '/' + str(expr1)
+            return tmp
+ elif not is_variable(expr1) and is_variable(expr2):
+     if check_occurs(expr2, expr1):
+         return False
+     else:
+         tmp = str(expr1) + '/' + str(expr2)
+         return tmp
+ else:
+     predicate_symbol_1, arg_list_1 = process_expression(expr1)
+     predicate_symbol_2, arg_list_2 = process_expression(expr2)
+     if predicate_symbol_1 != predicate_symbol_2:
+         return False
+     elif len(arg_list_1) != len(arg_list_2):
+        return False
+     else:
+            sub_list = list()
+ for i in range(len(arg_list_1)):
+    tmp = unify(arg_list_1[i], arg_list_2[i])
+ if not tmp:
+    return False
+ elif tmp == 'Null':
+    pass
+ else:
+    if type(tmp) == list:
+        for j in tmp:
+            sub_list.append(j)
+    else:
+         sub_list.append(tmp)
+ return sub_list
+if __name__ == '__main__':
+ 
+ f1 = 'Q(a, g(x, a), f(y))'
+ f2 = 'Q(a, g(f(b), a), x)'
+ result = unify(f1, f2)
+ if not result:
+    print('The process of Unification failed!')
+ else:
+    print('The process of Unification successful!')
+    print(result)
+
+---------------------------------------
+
+Exp 8: Implementation of uncertain methods for an application (Fuzzy logic/ Dempster Shafer Theory)
+
+pip install fuzzy
+from fuzzywuzzy import process
+str2Match = "apple inc"
+strOptions = ["Apple Inc.","apple park","apple incorporated","iphone"]
+Ratios = process.extract(str2Match,strOptions)
+print(Ratios)
+highest = process.extractOne(str2Match,strOptions)
+print(highest)
+
+----------------------------------
+
+Exp 9: Learning algorithm
+
+Supervised learning linear regression
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+# Importing the datasets
+datasets = pd.read_csv('Salary_Data.csv')
+X = datasets.iloc[:, :-1].values
+Y = datasets.iloc[:, 1].values
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_Train, X_Test, Y_Train, Y_Test = train_test_split(X, Y, test_size = 1/3, random_state = 0)
+# Fitting Simple Linear Regression to the training set
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_Train, Y_Train)
+# Predicting the Test set result 
+Y_Pred = regressor.predict(X_Test)
+# Visualising the Training set results
+plt.scatter(X_Train, Y_Train, color = 'red')
+plt.plot(X_Train, regressor.predict(X_Train), color = 'blue')
+plt.title('Salary vs Experience (Training Set)')
+plt.xlabel('Years of experience')
+plt.ylabel('Salary')
+plt.show()
+# Visualising the Test set results
+plt.scatter(X_Test, Y_Test, color = 'red')
+plt.plot(X_Train, regressor.predict(X_Train), color = 'blue')
+plt.title('Salary vs Experience (Training Set)')
+plt.xlabel('Years of experience')
+plt.ylabel('Salary')
+plt.show()
+
+Logistic Regression:
+
+import math
+import numpy as np
+import pandas as pd
+from pandas import DataFrame
+from sklearn import preprocessing
+from sklearn.linear_model import LogisticRegression
+#from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
+from numpy import loadtxt, where
+from pylab import scatter, show, legend, xlabel, ylabel
+# scale larger positive and values to between -
+1,1 depending on the largest
+# value in the data
+min_max_scaler = preprocessing.MinMaxScaler(feature_range=(-1,1))
+df = pd.read_csv("data.csv", header=0)
+# clean up data
+df.columns = ["grade1","grade2","label"]
+x = df["label"].map(lambda x: float(x.rstrip(';')))
+# formats the input data into two arrays, one of independant variables
+# and one of the dependant variable
+X = df[["grade1","grade2"]]
+X = np.array(X)
+X = min_max_scaler.fit_transform(X)
+Y = df["label"].map(lambda x: float(x.rstrip(';')))
+Y = np.array(Y)
+# if want to create a new clean dataset
+##X = pd.DataFrame.from_records(X,columns=['grade1','grade2'])
+##X.insert(2,'label',Y)
+##X.to_csv('data2.csv')
+# creating testing and training set
+X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size=0.33)
+# train scikit learn model
+clf = LogisticRegression()
+clf.fit(X_train,Y_train)
+print ('score Scikit learn: ', clf.score(X_test,Y_test))
+# visualize data, uncomment "show()" to run it
+pos = where(Y == 1)
+neg = where(Y == 0)
+scatter(X[pos, 0], X[pos, 1], marker='o', c='b')
+scatter(X[neg, 0], X[neg, 1], marker='x', c='r')
+xlabel('Exam 1 score')
+ylabel('Exam 2 score')
+legend(['Not Admitted', 'Admitted'])
+show()
+##The sigmoid function adjusts the cost function hypotheses to adjust t
+he algorithm proportionally for worse estimations
+def Sigmoid(z):
+ G_of_Z = float(1.0 / float((1.0 + math.exp(-1.0*z))))
+ return G_of_Z
+##The hypothesis is the linear combination of all the known factors x[i
+] and their current estimated coefficients theta[i]
+##This hypothesis will be used to calculate each instance of the Cost F
+unction
+def Hypothesis(theta, x):
+ z = 0
+ for i in xrange(len(theta)):
+ z += x[i]*theta[i]
+ return Sigmoid(z)
+##For each member of the dataset, the result (Y) determines which varia
+tion of the cost function is used
+##The Y = 0 cost function punishes high probability estimations, and th
+e Y = 1 it punishes low scores
+##The "punishment" makes the change in the gradient of ThetaCurrent - A
+verage(CostFunction(Dataset)) greater
+def Cost_Function(X,Y,theta,m):
+ sumOfErrors = 0
+ for i in xrange(m):
+ xi = X[i]
+ hi = Hypothesis(theta,xi)
+ if Y[i] == 1:
+ error = Y[i] * math.log(hi)
+ elif Y[i] == 0:
+ error = (1-Y[i]) * math.log(1-hi)
+ sumOfErrors += error
+ const = -1/m
+ J = const * sumOfErrors
+ print ('cost is ', J )
+ return J
+##This function creates the gradient component for each Theta value
+##The gradient is the partial derivative by Theta of the current value
+of theta minus
+##a "learning speed factor aplha" times the average of all the cost fun
+ctions for that theta
+##For each Theta there is a cost function calculated for each member of
+the dataset
+def Cost_Function_Derivative(X,Y,theta,j,m,alpha):
+ sumErrors = 0
+ for i in xrange(m):
+ xi = X[i]
+ xij = xi[j]
+ hi = Hypothesis(theta,X[i])
+ error = (hi - Y[i])*xij
+ sumErrors += error
+ m = len(Y)
+constant = float(alpha)/float(m)
+ J = constant * sumErrors
+ return J
+##For each theta, the partial differential
+##The gradient, or vector from the current point in Thetaspace (each theta value is its own dimension) to the more accurate poin
+t,
+##is the vector with each dimensional component being the partial diffe
+rential for each theta value
+def Gradient_Descent(X,Y,theta,m,alpha):
+ new_theta = []
+ constant = alpha/m
+ for j in xrange(len(theta)):
+ CFDerivative = Cost_Function_Derivative(X,Y,theta,j,m,alpha)
+ new_theta_value = theta[j] - CFDerivative
+ new_theta.append(new_theta_value)
+ return new_theta
+##The high level function for the LR algorithm which, for a number of s
+teps (num_iters) finds gradients which take
+##the Theta values (coefficients of known factors) from an estimation c
+loser (new_theta) to their "optimum estimation" which is the
+##set of values best representing the system in a linear combination mo
+del
+def Logistic_Regression(X,Y,alpha,theta,num_iters):
+ m = len(Y)
+ for x in xrange(num_iters):
+ new_theta = Gradient_Descent(X,Y,theta,m,alpha)
+ theta = new_theta
+ if x % 100 == 0:
+ #here the cost function is used to present the final hypothesis o
+f the model in the same form for each gradient-step iteration
+ Cost_Function(X,Y,theta,m)
+ print ('theta ', theta)
+ print ('cost is ', Cost_Function(X,Y,theta,m))
+ Declare_Winner(theta)
+##This method compares the accuracy of the model generated by the sciki
+t library with the model generated by this implementation
+def Declare_Winner(theta):
+ score = 0
+ winner = ""
+ #first scikit LR is tested for each independent var in the dataset
+and its prediction is compared against the dependent var
+ #if the prediction is the same as the dataset measured value it cou
+nts as a point for thie scikit version of LR
+ scikit_score = clf.score(X_test,Y_test)
+ length = len(X_test)
+ for i in xrange(length):
+ prediction = round(Hypothesis(X_test[i],theta))
+ answer = Y_test[i]
+ if prediction == answer:
+ score += 1
+ #the same process is repeated for the implementation from this modu
+le and the scores compared to find the higher match-rate
+ my_score = float(score) / float(length)
+ if my_score > scikit_score:
+ print ('You won!')
+ elif my_score == scikit_score:
+ print ('Its a tie!')
+ else:
+ print( 'Scikit won.. :(')
+ print ('Your score: ', my_score)
+ print ('Scikits score: ', scikit_score )
+# These are the initial guesses for theta as well as the learning rate
+of the algorithm
+# A learning rate too low will not close in on the most accurate values
+within a reasonable number of iterations
+# An alpha too high might overshoot the accurate values or cause irrati
+c guesses
+# Each iteration increases model accuracy but with diminishing returns,
+# and takes a signficicant coefficient times O(n)*|Theta|, n = dataset
+length
+initial_theta = [0,0]
+alpha = 0.1
+iterations = 1000
+
+
+
+
+
+
